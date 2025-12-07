@@ -1,9 +1,29 @@
 {
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backend for myShoppingPortalApp",
+  "homepage": "https://github.com/rachit-sh/myShoppingPortalApp#readme",
+  "bugs": {
+    "url": "https://github.com/rachit-sh/myShoppingPortalApp/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rachit-sh/myShoppingPortalApp.git"
+  },
+  "license": "ISC",
+  "author": "Rachit",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "mongoose": "^9.0.1",
     "nodemon": "^3.1.11"
-  }
+  },
+  "devDependencies": {}
 }
