@@ -1,4 +1,5 @@
 export const DB_NAME = "myShoppingPortalDB";
+export const SALT_ROUNDS = 10;
 
 /*
 Additional configuration constants
@@ -11,7 +12,6 @@ export const DB_COLLECTIONS = {
 };
 export const SERVER_PORT = 8080;
 export const JWT_SECRET = "your_jwt_secret_key";
-export const SALT_ROUNDS = 10;
 export const API_VERSION = "v1";
 export const MAX_LOGIN_ATTEMPTS = 5;
 export const TOKEN_EXPIRY = "1h";

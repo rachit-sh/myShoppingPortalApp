@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
+import { SALT_ROUNDS } from '../config/constants';
 
 const userSchema = new Schema(
     {
@@ -36,7 +37,7 @@ userSchema.pre('save', async function () {
     // We only hash the password if it has been modified (or is new)
 
     // Hash the password
-    this.password = await bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(this.password, SALT_ROUNDS); // SALT_ROUNDS = 10
 });
 
 // Compare password method
