@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProductCard from './ProductCard.jsx';
 
-const ProductList = () => {
+const ProductList = ({ onAddToCart }) => {
     // 1. STATE: products is where the data will be stored.
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -42,7 +42,7 @@ const ProductList = () => {
                     <p>No products available.</p>
                 ) : (
                     products.map((product) => (
-                        <ProductCard key={product._id} product={product} />
+                        <ProductCard key={product._id} product={product} onAddToCart={onAddToCart} />
                     ))
                 )}
             </div>

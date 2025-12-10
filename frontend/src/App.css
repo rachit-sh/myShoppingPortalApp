@@ -84,3 +84,84 @@
   background-color: #bdbdbd;
   cursor: not-allowed;
 }
+
+/* Layout for Main Content Area */
+.main-content-area {
+  display: flex; /* Use Flexbox for side-by-side layout */
+  gap: 30px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Make the Product List take up more space */
+.product-list-container {
+  flex: 3; /* Takes 3 parts of the available space */
+  padding-right: 20px;
+  border-right: 1px solid #eee;
+}
+
+/* Make the Cart take up less space */
+.cart-container {
+  flex: 1; /* Takes 1 part of the available space */
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  height: fit-content; /* Ensure the background only covers the content */
+}
+
+.cart-list {
+  list-style: none;
+  padding: 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed #eee;
+  font-size: 0.9em;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.item-name {
+  font-weight: 500;
+}
+
+.item-qty {
+  color: #666;
+  margin-left: 10px;
+}
+
+.cart-summary h4 {
+  text-align: right;
+  margin-bottom: 10px;
+  color: #388e3c;
+}
+
+.checkout-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.checkout-button:hover {
+  background-color: #0056b3;
+}
+
+.checkout-button:active {
+  background-color: #004085;
+}
+
+.checkout-button:disabled {
+  background-color: #bdbdbd;
+  cursor: not-allowed;
+}

@@ -1,10 +1,12 @@
 import dotenv from 'dotenv';
+
+dotenv.config();
+// Here, we did not use { path: './config/.env' } because by default it looks for .env file in the root directory
+
 import connectDB from './config/database.js';
 import app from './app.js';
 
-dotenv.config({
-    path: './.env'
-});
+const PORT = process.env.PORT || 4000;
 
 const startServer = async () => {
     try {
@@ -15,8 +17,8 @@ const startServer = async () => {
             throw err;
         });
         
-        app.listen(process.env.PORT || 8000, () => {
-            console.log(`Server running on port ${process.env.PORT}`);
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
         });
     } catch (error) {
         console.error(`Failed to start server: ${error.message}`);

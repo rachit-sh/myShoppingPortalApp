@@ -20,10 +20,8 @@ app.use(cors()); // Enable CORS
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 
-// example route: http://localhost:4000/api/v1/users/register
-
 app.get('/', (req, res) => {
-    res.send('Welcome to the Backend API');
+    res.send('API is running...');
 });
 
 export default app;

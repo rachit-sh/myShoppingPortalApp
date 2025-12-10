@@ -8,13 +8,21 @@ In React 18 and later, it's still a good practice to include it for clarity.
 
 // The component accepts 'props' (properties) passed from its parent.
 // We use object destructuring { product } to immediately access the 'product' object.
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onAddToCart }) => {
     if (!product) {
         return <div>Loading...</div>;
     }
 
     // Destructure the product properties for cleaner JSX
     const { name, description, price, category, stock, imageUrl } = product;
+
+    // Function to handle button click
+    const handleButtonClick = () => {
+        if (onAddToCart) {
+            onAddToCart(product);
+            console.log(`Added ${product.name} to cart!`);
+        }
+    };
 
     return (
         <div className="product-card">
@@ -32,7 +40,7 @@ const ProductCard = ({ product }) => {
                 <p className="product-category">Category: {category}</p>
                 <p className="product-stock">In Stock: {stock}</p>
 
-                <button className="add-to-cart-button">Add to Cart</button>
+                <button className="add-to-cart-button" onClick={handleButtonClick}>Add to Cart</button>
             </div>
         </div>
     );
