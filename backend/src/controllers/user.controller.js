@@ -1,6 +1,6 @@
 import { User } from '../models/user.model.js';
 
-const registerUser = async (req, res) => {
+const signupUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
@@ -58,10 +58,26 @@ const loginUser = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        return res.status(200).json({
-            message: 'User logged in successfully',
-            user: { userId: user._id, username: user.username, email: user.email }
-        });
+        // generate the access token
+        const accessToken = user.generateAuthToken();
+
+        // configure cookie options
+        const cookieOptions = {
+            httpOnly: true, // Prevents client-side JS from accessing the cookie
+            secure: process.env.NODE_ENV === 'production', // Ensures cookie is sent over HTTPS in production
+            sameSite: 'strict', // Mitigates CSRF attacks
+            maxAge: 24 * 60 * 60 * 1000 // 1 day expiration
+        };
+
+        // set the token in an HTTP-only cookie
+        return res
+            .status(200)
+            .cookie('accessToken', accessToken, cookieOptions)
+            .json({
+                message: 'User logged in successfully',
+                user: { userId: user._id, username: user.username, email: user.email }
+                //! We don't send the token in the JSON response body, only in the cookie.
+            });
 
     } catch (error) {
         console.error(`Error logging in user: ${error.message}`);
@@ -69,50 +85,28 @@ const loginUser = async (req, res) => {
     }
 };
 
-/*
-const logoutCurrentUser = async (req, res) => {
-    try {
-        /// In a real-world application, you would handle session/token invalidation here.
-
-        /// A detailed implementation is as follows:
-        const userId = req.user.id; // assuming user ID is available in req.user from authentication middleware
-        
-        /// find user by ID
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        
-        /// perform logout logic (e.g., invalidate session/token)
-        return res.status(200).json({
-            message: 'User logged out successfully'
-        });
-    } catch (error) {
-        console.error(`Error logging out user: ${error.message}`);
-        return res.status(500).json({ message: 'Server error' });
-    }
+const getCurrentUser = async (req, res) => {
+    return res.status(200).json({
+        message: 'Current user details fetched successfully',
+        user: req.user // req.user contains the user's data (without the password)
+    });
 };
-*/
 
 const logoutUser = async (req, res) => {
     try {
-        const { email } = req.body;
+        const cookieOptions = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 0 // Set maxAge to 0 or a past date to immediately expire the cookie
+        };
 
-        // basic validation
-        if (!email) {
-            return res.status(400).json({ message: 'Email is required' });
-        }
-
-        // check if user exists
-        const user = await User.findOne({ email: email.toLowerCase().trim() });
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        return res.status(200).json({
-            message: 'User logged out successfully'
-        });
+        return res
+            .status(200)
+            .clearCookie('accessToken', cookieOptions)
+            .json({
+                message: 'User logged out successfully'
+            });
 
     } catch (error) {
         console.error(`Error logging out user: ${error.message}`);
@@ -120,4 +114,4 @@ const logoutUser = async (req, res) => {
     }
 };
 
-export { registerUser, loginUser, logoutUser };
+export { signupUser, loginUser, getCurrentUser, logoutUser };

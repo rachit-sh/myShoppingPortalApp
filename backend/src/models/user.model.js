@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { SALT_ROUNDS } from '../config/constants.js';
 
 const userSchema = new Schema(
@@ -45,5 +46,22 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
     // Compares the provided password with the stored hashed password
 };
+
+// Generate access token (JWT) method
+userSchema.methods.generateAuthToken = function () {
+    return jwt.sign(
+        {
+            // Payload data for the token (Store user info in the token)
+            _id: this._id,
+            username: this.username,
+            email: this.email
+        },
+        
+        // Secret key
+        process.env.JWT_SECRET,
+        // Options
+        { expiresIn: '1d' } // Token valid for 1 day
+    );
+}
 
 export const User = mongoose.model('User', userSchema);

@@ -1,7 +1,7 @@
 import React from 'react';
 
 // The component receives the cart items array as a prop
-const Cart = ({ items }) => {
+const Cart = ({ items, onRemove, onDecrease, onAdd }) => {
   // Calculate the total price of all items in the cart
   const calculateTotal = () => {
     // items.reduce is a powerful array method for calculating a single value (the sum)
@@ -21,15 +21,29 @@ const Cart = ({ items }) => {
             {items.map(item => (
               <li key={item._id} className="cart-item">
                 <div className="item-details">
-                  {/* Display item name and quantity */}
+                  {/* Display item name */}
                   <span className="item-name">{item.name}</span>
-                  <span className="item-qty">Qty: **{item.quantity}**</span>
+
+                  {/* Quantity controls */}
+                  <div className="item-controls">
+                    {/* Decrease Button: Uses onDecrease prop function */}
+                    <button className="qty-btn" onClick={() => onDecrease(item._id)}>−</button>
+
+                    <span className="item-qty">Qty: **{item.quantity}**</span>
+
+                    {/* Increase Button: Uses onAdd prop function, passing the item object */}
+                    <button className="qty-btn" onClick={() => onAdd(item)}>+</button>
+                  </div>
                 </div>
 
-                {/* Display item subtotal */}
-                <span className="item-subtotal">
-                  ${(item.price * item.quantity).toFixed(2)}
-                </span>
+                <div className="item-actions">
+                  {/* Display item subtotal */}
+                  <span className="item-subtotal">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </span>
+                  {/* Remove Button: Uses onRemove prop function */}
+                  <button className="remove-btn" onClick={() => onRemove(item._id)}>&times;</button>
+                </div>
               </li>
             ))}
           </ul>
