@@ -8,7 +8,7 @@ In React 18 and later, it's still a good practice to include it for clarity.
 
 // The component accepts 'props' (properties) passed from its parent.
 // We use object destructuring { product } to immediately access the 'product' object.
-const ProductCard = ({ product, onAddToCart }) => {
+const ProductCard = ({ product, onAddToCart, isAuthenticated }) => {
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -18,7 +18,7 @@ const ProductCard = ({ product, onAddToCart }) => {
 
     // Function to handle button click
     const handleButtonClick = () => {
-        if (onAddToCart) {
+        if (isAuthenticated && onAddToCart) {
             onAddToCart(product);
             console.log(`Added ${product.name} to cart!`);
         }
@@ -30,7 +30,7 @@ const ProductCard = ({ product, onAddToCart }) => {
 
             <div className="product-details">
                 <h2 className="product-name">{name}</h2>
-                <p className="product-description">{description && description.substring(0, 50) + '...'}</p>
+                <p className="product-description">{description && description.substring(0, 50) + '...' || 'Product Description...'}</p>
                 {/*
                 Here, using description.substring(0, 50) to limit description length.
                 It means showing only first 50 characters of description.
@@ -40,7 +40,13 @@ const ProductCard = ({ product, onAddToCart }) => {
                 <p className="product-category">Category: {category}</p>
                 <p className="product-stock">In Stock: {stock}</p>
 
-                <button className="add-to-cart-button" onClick={handleButtonClick}>Add to Cart</button>
+                <button
+                    className="add-to-cart-button"
+                    onClick={handleButtonClick}
+                    disabled={!isAuthenticated}
+                >
+                    {isAuthenticated ? 'Add to Cart' : 'Login to Add'}
+                </button>
             </div>
         </div>
     );

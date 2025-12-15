@@ -12,6 +12,9 @@ const Header = () => {
                 <Link to="/" className="nav-link logo-link">🛒 My Shopping Portal</Link>
                 
                 <div className="nav-links-right">
+                    {/* Add Profile Link ONLY if logged in */}
+                    {currentUser && <Link to="/profile" className="nav-link">👤 Profile</Link>}
+
                     <Link to="/cart" className="nav-link">🛍️ Cart</Link>
 
                     {/* Conditional rendering based on authentication status */}
