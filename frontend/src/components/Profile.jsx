@@ -2,31 +2,31 @@ import React from 'react';
 import { useAuth } from '../context/useAuth';
 
 const Profile = () => {
-  // We already have the user details from the context, thanks to the login process and checkAuth
-  const { currentUser, isLoading } = useAuth(); 
+    // We already have the user details from the context, thanks to the login process and checkAuth
+    const { currentUser, isLoading } = useAuth(); 
 
-  if (isLoading) {
-    return (
+    if (isLoading) {
+        return (
             <div className="main-content-area">
                 <h2>Loading profile details...</h2>
             </div>
         );
-  }
+    }
 
-  if (!currentUser) {
-    // This should theoretically not happen if the route is protected, 
-    // but it's good practice to handle the unauthenticated state.
-    return (
+    if (!currentUser) {
+        // This should theoretically not happen if the route is protected, 
+        // but it's good practice to handle the unauthenticated state.
+        return (
             <div className="main-content-area">
                 <h2>Please log in to view your profile.</h2>
             </div>
         );
-  }
+    }
 
-  return (
-    <div className="profile-container">
+    return (
+        <div className="profile-container">
             {/* The profile-card provides the modern dashboard container structure */}
-      <div className="profile-card">
+            <div className="profile-card">
                 
                 {/* Visual Header Banner with the floating avatar wrapper */}
                 <div className="profile-header-banner">
@@ -73,9 +73,9 @@ const Profile = () => {
                         Edit Profile
                     </button>
                 </div>
-      </div>
-    </div>
-  );
+            </div>
+        </div>
+    );
 };
 
 export default Profile;
