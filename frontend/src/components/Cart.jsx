@@ -45,10 +45,10 @@ const Cart = ({ items, onRemove, onDecrease, onAdd }) => {
                                         {/* Display item name */}
                                         <p className="cart-item-name">{product.name}</p>
                                         {/* Display individual item price */}
-                                        <p className="cart-item-price">${product.price?.toFixed(2)}</p>
+                                        <p className="cart-item-price">₹{product.price?.toFixed(2)}</p>
                                     </div>
 
-                                    {/* Quantity controls: Uses the styled control group from index.css */}
+                                    {/* Quantity controls: Uses the styled control group from App.css */}
                                     <div className="cart-item-controls">
                                         {/* Decrease Button: Uses onDecrease prop function */}
                                         <button onClick={() => onDecrease(product._id)}>−</button>
@@ -78,7 +78,7 @@ const Cart = ({ items, onRemove, onDecrease, onAdd }) => {
                         {/* Row for Subtotal calculation */}
                         <div className="summary-row">
                             <span>Subtotal</span>
-                            <span>${totalPrice}</span>
+                            <span>₹{totalPrice}</span>
                         </div>
 
                         {/* Row for Shipping info (Mocked as free for this version) */}
@@ -90,7 +90,7 @@ const Cart = ({ items, onRemove, onDecrease, onAdd }) => {
                         {/* Final calculation row using the 'total' class for emphasis */}
                         <div className="summary-row total">
                             <span>Total</span>
-                            <span>${totalPrice}</span>
+                            <span>₹{totalPrice}</span>
                         </div>
 
                         <button className="checkout-button">Proceed to Checkout</button>

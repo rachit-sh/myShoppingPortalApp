@@ -10,7 +10,7 @@ import { Product } from './models/product.model.js';
 const sampleProducts = [
   {
     name: 'Electric Blender Pro',
-    price: 89.99,
+    price: 4899.00,
     description: 'High-speed blender with multiple presets for smoothies and soups.',
     category: 'Kitchen Appliances',
     stock: 25,
@@ -18,7 +18,7 @@ const sampleProducts = [
   },
   {
     name: 'Noise Cancelling Headphones',
-    price: 199.50,
+    price: 11999.00,
     description: 'Over-ear headphones with premium sound quality and long battery life.',
     category: 'Electronics',
     stock: 15,
@@ -26,7 +26,7 @@ const sampleProducts = [
   },
   {
     name: 'Ergonomic Office Chair',
-    price: 349.00,
+    price: 7499.00,
     description: 'Fully adjustable chair designed for all-day comfort and support.',
     category: 'Furniture',
     stock: 10,
@@ -34,7 +34,7 @@ const sampleProducts = [
   },
   {
     name: '4K Smart TV 55"',
-    price: 650.99,
+    price: 62999.00,
     description: 'Stunning 4K resolution with built-in streaming apps.',
     category: 'Electronics',
     stock: 8,

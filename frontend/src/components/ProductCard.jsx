@@ -36,7 +36,7 @@ const ProductCard = ({ product, onAddToCart, isAuthenticated }) => {
                 It means showing only first 50 characters of description.
                 The rest will be truncated with '...'
                 */}
-                <p className="product-price">${price ? price.toFixed(2) : 'N/A'}</p>
+                <p className="product-price">₹{price ? price.toFixed(2) : 'N/A'}</p>
                 <p className="product-category">Category: {category}</p>
                 <p className="product-stock">In Stock: {stock}</p>
 

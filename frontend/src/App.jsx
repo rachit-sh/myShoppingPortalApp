@@ -12,6 +12,9 @@ import Header from "./components/Header.jsx";
 import Login from "./components/Login.jsx";
 import Signup from "./components/Signup.jsx";
 
+// CSS file for App
+import "./App.css"
+
 // API Instance (Ensure this uses withCredentials for cookies)
 const api = axios.create({
   baseURL: 'http://localhost:4000/api/v1',
@@ -135,21 +138,6 @@ const AppContent = () => {
   return (
     <div className="App">
       <Header />
-      {/*
-      <header>
-        {/* Display Auth Status *\/}
-        {currentUser ? (
-            <span>Welcome, {currentUser.username}!</span>
-        ) : (
-            <span>Please log in or sign up.</span>
-        )}
-        <h1>My Shopping Portal</h1>
-        <p>
-          Cart Total: **{cartItems.reduce((acc, item) => acc + item.quantity, 0)}** items
-          <img src="cart-icon.png" alt="Cart Icon" className="cart-icon" />
-        </p>
-      </header>
-      */}
       <main className="main-content-area"> {/* Add a class for layout */}
         <Routes>
           {/* Home Route: Products List
@@ -204,58 +192,6 @@ const AppContent = () => {
     </div>
   );
 };
-
-  /*
-  // 1. Define Cart State: An array to hold the items in the cart.
-  const [cartItems, setCartItems] = useState([]);
-
-  // 2. Define the Add to Cart function (The State Setter)
-  const handleAddToCart = (product) => {
-    // Check if the product is already in the cart
-    const existingItem = cartItems.find(item => item._id === product._id);
-
-    if (existingItem) {
-      // If it exists, update its quantity
-      setCartItems(
-        cartItems.map(item =>
-          item._id === product._id
-            ? { ...item, quantity: item.quantity + 1 } // Increment quantity
-            : item
-        )
-      );
-    } else {
-      // If it's a new item, add it to the cart with quantity 1
-      setCartItems([...cartItems, { ...product, quantity: 1 }]);
-      // Using ... means to copy all properties of product. It is called Spread Operator.
-    }
-  };
-
-  // 3. Define the Decrease Quantity function
-  const handleDecreaseQuantity = (productId) => {
-    setCartItems(prevItems => {
-      // Find the item to decrease
-      const existingItem = prevItems.find(item => item._id === productId);
-
-      if (existingItem.quantity === 1) {
-        // If quantity is 1, remove the item from the cart
-        return prevItems.filter(item => item._id !== productId);
-      } else {
-        // Otherwise, decrease the quantity by 1
-        return prevItems.map(item =>
-          item._id === productId
-            ? { ...item, quantity: item.quantity - 1 }
-            : item
-        );
-      }
-    });
-  };
-
-  // 4. Define the Remove from Cart function
-  const handleRemoveFromCart = (productId) => {
-    setCartItems(cartItems.filter(item => item._id !== productId));
-  };
-*/
-
 
 // The Root App component sets up the Router and Auth Provider
 function App() {

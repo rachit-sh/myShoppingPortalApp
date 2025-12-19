@@ -7,7 +7,7 @@ const Header = () => {
     
     // Place all navigation links here
     return (
-        /* The app-header class provides the sticky glass-morphic effect from index.css */
+        /* The app-header class provides the sticky glass-morphic effect from App.css */
         <header className="app-header">
             <nav>
                 {/* Logo/Home Link: Uses logo-link for distinct professional branding */}
