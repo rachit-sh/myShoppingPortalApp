@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/useAuth.js';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const { login, isLoading, error, currentUser } = useAuth();
@@ -21,33 +22,55 @@ const Login = () => {
 
     if (currentUser) {
         // Optional: Show a message or redirect if already logged in
-        return <div>You are already logged in as {currentUser.username}.</div>;
+        return (
+            <div className="main-content-area">
+                <div className="auth-form-container" style={{ textAlign: 'center' }}>
+                    <h2>Welcome Back!</h2>
+                    <p>You are already logged in as **{currentUser.username}**.</p>
+                </div>
+            </div>
+        );
     }
 
     return (
         <div className="auth-form-container">
-            <h3>Log In</h3>
+            <h2>Log In</h2>
+            <p className="auth-subtitle">Welcome back! Please enter your details.</p>
+
             <form onSubmit={handleSubmit}>
-                {error && <p className="error-message">{error}</p>}
+                {/* Display error message if the auth context catches one */}
+                {error && <div className="form-message error">{error}</div>}
                 
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Logging In...' : 'Log In'}
+                <div className="form-group">
+                    <label>Email Address</label>
+                    <input
+                        type="email"
+                        placeholder="name@company.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Password</label>
+                    <input
+                        type="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <button type="submit" className="auth-submit-button" disabled={isLoading}>
+                    {isLoading ? 'Verifying...' : 'Sign In'}
                 </button>
             </form>
+
+            <div className="auth-switch">
+                <p>Don't have an account? <Link to="/signup">Create one for free</Link></p>
+            </div>
         </div>
     );
 };
