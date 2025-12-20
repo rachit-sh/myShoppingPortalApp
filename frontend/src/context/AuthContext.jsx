@@ -1,6 +1,5 @@
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 const AuthContext = createContext();
 
@@ -65,36 +64,29 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(true);
         try {
             await api.post(`/users/logout`);
-            setCurrentUser(null);
-            setIsLoading(false);
-            // Cookies are cleared by the backend, but we clear client state
         } catch (err) {
-            // Even if logout fails, we clear client state for security
+            console.error('Logout error:', err);
+        } finally {
+            // Cookies are cleared by the backend, but always clear local state even if backend errors
             setCurrentUser(null);
             setIsLoading(false);
-            console.error('Logout error:', err);
         }
     };
     
     // 4. Function to check authentication state (e.g., on page load)
     // This calls the protected route /current-user to verify the cookie validity
     const checkAuth = async () => {
-        // Only run if the user hasn't been set or if a token cookie exists
+        // If we already have a user in memory, don't hit the API again
         if (currentUser) return; 
 
-        // Check if the accessToken cookie exists before hitting the protected endpoint
-        if (!Cookies.get('accessToken')) {
-             setCurrentUser(null);
-             return;
-        }
-
         try {
+            // We blindly try to get the user. If the httpOnly cookie is missing/invalid, 
+            // the backend will throw 401, and we catch it below.
             const response = await api.get(`/users/current-user`);
             setCurrentUser(response.data.user);
         } catch (err) {
             // If verification fails (expired token), the backend clears the cookie.
             setCurrentUser(null);
-            Cookies.remove('accessToken'); // Ensure client-side cookie is removed if backend failed to clear it
             console.error('Error:', err);
         }
     };

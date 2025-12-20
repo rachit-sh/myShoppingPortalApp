@@ -38,10 +38,19 @@ export const createProduct = async (req, res) => {
     }
 };
 
-// Get all products
+// Get all products (With Pagination)
 export const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find();
+        // Parse query params, default to Page 1, Limit 35
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 35;
+        const skip = (page - 1) * limit;
+
+        const products = await Product.find()
+            .sort({ createdAt: -1 }) // Show newest products first
+            .skip(skip)
+            .limit(limit);
+        
         res.status(200).json(products);
     } catch (error) {
         console.error(`Error fetching products: ${error.message}`);

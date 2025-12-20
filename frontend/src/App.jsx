@@ -3,14 +3,15 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { useAuth } from "./context/useAuth.js";
 import axios from "axios";
-import Profile from "./components/Profile.jsx";
 
 // Components
+import Profile from "./components/Profile.jsx";
 import ProductList from "./components/ProductList.jsx";
 import Cart from "./components/Cart.jsx";
 import Header from "./components/Header.jsx";
 import Login from "./components/Login.jsx";
 import Signup from "./components/Signup.jsx";
+import Checkout from "./components/Checkout.jsx";
 
 // CSS file for App
 import "./App.css"
@@ -79,7 +80,9 @@ const AppContent = () => {
           })));
       } catch (err) {
           console.error("Failed to update cart:", err);
-          setCartError("Failed to update cart. Session may have expired.");
+
+          //? setCartError("Failed to update cart. Session may have expired.");
+          
       }
   };
   
@@ -97,14 +100,24 @@ const AppContent = () => {
           })));
       } catch (err) {
           console.error("Failed to remove item:", err);
-          setCartError("Failed to remove item. Session may have expired.");
       }
   };
 
   // ----------------------------------------------------
   // Local Helper Functions (Mapping to API calls)
   // ----------------------------------------------------
-  
+
+  // --- CLEAR CART ---
+  const handleClearCart = async () => {
+      if (!currentUser) return;
+      try {
+          await api.delete('/cart/clear');
+          setCartItems([]);
+      } catch (err) {
+          console.error("Failed to clear cart on backend:", err);
+      }
+  };
+
   // Maps the old add function to the new API call
   const handleAddToCart = (product) => {
       // Add 1 to the cart (quantity 1 means increase by 1)
@@ -132,7 +145,12 @@ const AppContent = () => {
   // ----------------------------------------------------
 
   if (cartError) {
-      return <h2>Error: {cartError}</h2>; // Basic error screen
+      return (
+        <div className="main-content-area" style={{textAlign: 'center', marginTop: '5rem'}}>
+            <h2 style={{color: 'var(--danger)'}}>Unable to load data</h2>
+            <p>{cartError}</p>
+        </div>
+      );
   }
 
   return (
@@ -164,6 +182,18 @@ const AppContent = () => {
                 onRemove={handleRemoveFromCart}
               />
             }
+          />
+
+          {/* --- CHECKOUT ROUTE --- */}
+          <Route 
+             path="/checkout"
+             element={
+                currentUser && cartItems.length > 0 ? (
+                    <Checkout cartItems={cartItems} onClearCart={handleClearCart} />
+                ) : (
+                    <Navigate to="/cart" replace />
+                )
+             }
           />
 
           {/* Public Auth Routes: Use Navigate to redirect if user is already logged in */}

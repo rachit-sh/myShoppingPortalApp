@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // The component receives the cart items array and handler functions as props
 const Cart = ({ items, onRemove, onDecrease, onAdd }) => {
@@ -93,7 +94,9 @@ const Cart = ({ items, onRemove, onDecrease, onAdd }) => {
                             <span>₹{totalPrice}</span>
                         </div>
 
-                        <button className="checkout-button">Proceed to Checkout</button>
+                        <Link to="/checkout" style={{ textDecoration: 'none' }}>
+                            <button className="checkout-button">Proceed to Checkout</button>
+                        </Link>
                     </div>
 
                 </div>

@@ -20,7 +20,7 @@ const signupUser = async (req, res) => {
             username: username.toLowerCase().trim(),
             email: email.toLowerCase().trim(),
             password: password, // will be hashed in pre-save hook
-            loggedIn: false // Indicating user is not logged in upon registration automatically.
+            // User is not logged in upon registration automatically.
         });
         await newUser.save();
         

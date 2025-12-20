@@ -1,20 +1,15 @@
 import { Cart } from '../models/cart.model.js';
 import { Product } from '../models/product.model.js'; 
 
-const getUserCart = async (userId) => {
-    // Try to find the cart and populate the product details
-    let cart = await Cart.findOne({ owner: userId }).populate('items.product');
-
-    // If no cart exists, create a new empty one for the user
-    if (!cart) {
-        cart = await Cart.create({ owner: userId, items: [] });
-    }
-    return cart;
-};
-
 const getCart = async (req, res) => {
     try {
-        const cart = await getUserCart(req.user._id);
+        const userId = req.user._id;
+        // Find cart or create if not exists (using upsert logic effectively)
+        let cart = await Cart.findOne({ owner: userId }).populate('items.product');
+        
+        if (!cart) {
+            cart = await Cart.create({ owner: userId, items: [] });
+        }
         return res.status(200).json({ cart });
 
     } catch (error) {
@@ -23,39 +18,49 @@ const getCart = async (req, res) => {
     }
 };
 
+// Update Cart (Atomic & Concurrency Safe)
 const updateCart = async (req, res) => {
     try {
         const { productId, quantity = 1 } = req.body;
         const userId = req.user._id;
 
-        if (!productId) {
-            return res.status(400).json({ message: "Product ID is required." });
-        }
-        
+        // Validation
         const productExists = await Product.findById(productId);
         if (!productExists) {
             return res.status(404).json({ message: "Product not found." });
         }
 
-        const cart = await getUserCart(userId);
-        const itemIndex = cart.items.findIndex(item => item.product._id.toString() === productId);
+        // A. Try to update existing item quantity atomically
+        // "$inc" increments the value. If quantity is -1, it decreases.
+        let cart = await Cart.findOneAndUpdate(
+            { owner: userId, "items.product": productId },
+            { $inc: { "items.$.quantity": quantity } },
+            { new: true } // Return updated doc
+        ).populate('items.product');
 
-        if (itemIndex > -1) {
-            cart.items[itemIndex].quantity += quantity;
-            if (cart.items[itemIndex].quantity <= 0) {
-                 cart.items.splice(itemIndex, 1);
-            }
-        } else if (quantity > 0) {
-            cart.items.push({ product: productId, quantity });
+        // B. If product was NOT in cart, push it as a new item
+        if (!cart) {
+            cart = await Cart.findOneAndUpdate(
+                { owner: userId },
+                { $push: { items: { product: productId, quantity: quantity } } },
+                { new: true, upsert: true } // Create cart if it doesn't exist
+            ).populate('items.product');
         }
-        
-        await cart.save();
-        
-        const updatedCart = await Cart.findById(cart._id).populate('items.product');
+
+        // C. Cleanup: Remove items with 0 or negative quantity
+        // This cleans up the array in one go after the update
+        const hasInvalidItems = cart.items.some(item => item.quantity <= 0);
+        if (hasInvalidItems) {
+            cart = await Cart.findOneAndUpdate(
+                { owner: userId },
+                { $pull: { items: { quantity: { $lte: 0 } } } },
+                { new: true }
+            ).populate('items.product');
+        }
 
         return res.status(200).json({ 
             message: "Cart updated successfully",
-            cart: updatedCart
+            cart: cart
         });
 
     } catch (error) {
@@ -69,21 +74,15 @@ const removeItemFromCart = async (req, res) => {
         const { productId } = req.body;
         const userId = req.user._id;
 
-        if (!productId) {
-            return res.status(400).json({ message: "Product ID is required." });
-        }
-
-        const cart = await getUserCart(userId);
-        
-        cart.items = cart.items.filter(item => item.product._id.toString() !== productId);
-        
-        await cart.save();
-        
-        const updatedCart = await Cart.findById(cart._id).populate('items.product');
+        const cart = await Cart.findOneAndUpdate(
+            { owner: userId },
+            { $pull: { items: { product: productId } } },
+            { new: true }
+        ).populate('items.product');
 
         return res.status(200).json({ 
-            message: "Item removed from cart successfully",
-            cart: updatedCart
+            message: "Item removed successfully",
+            cart: cart
         });
         
     } catch (error) {
@@ -92,4 +91,21 @@ const removeItemFromCart = async (req, res) => {
     }
 };
 
-export { getCart, updateCart, removeItemFromCart };
+const clearCart = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        
+        // Set items array to empty
+        await Cart.findOneAndUpdate(
+            { owner: userId },
+            { $set: { items: [] } }
+        );
+
+        return res.status(200).json({ message: "Cart cleared successfully" });
+    } catch (error) {
+        console.error("Error clearing cart:", error.message);
+        return res.status(500).json({ message: "Server error." });
+    }
+};
+
+export { getCart, updateCart, removeItemFromCart, clearCart };
