@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
+import { useCart } from '../context/useCart.js';
+import { useAuth } from '../context/useAuth.js';
 
-const Checkout = ({ cartItems, onClearCart }) => {
+const Checkout = () => {
     const navigate = useNavigate();
+    const { cartItems, clearCart } = useCart();
+    const { currentUser } = useAuth();
     const [isOrdered, setIsOrdered] = useState(false);
     
     // Local state for the temporary address (not stored in backend)
@@ -13,6 +17,13 @@ const Checkout = ({ cartItems, onClearCart }) => {
         pinCode: '',
         state: ''
     });
+
+    // Local state to store total price to display in the final receipt
+    const [lastTotalPaid, setLastTotalPaid] = useState(0);
+
+    // Redirect if not logged in or cart is empty
+    if (!currentUser) return <Navigate to="/login" />;
+    if (cartItems.length === 0 && !isOrdered) return <Navigate to="/cart" />;
 
     // Calculate total locally to display on the receipt
     const calculateTotal = () => {
@@ -29,18 +40,28 @@ const Checkout = ({ cartItems, onClearCart }) => {
         setAddress({ ...address, [e.target.name]: e.target.value });
     };
 
-    const handlePlaceOrder = (e) => {
+    const handlePlaceOrder = async (e) => {
+        // Prevent page refresh if called from a form
         e.preventDefault();
-        // Simulation: We set the ordered state to true to show the receipt.
-        // We do NOT clear the cart immediately, so we can render the items in the receipt.
-        setIsOrdered(true);
+        
+        try {
+            setLastTotalPaid(totalPrice);
+            // Simulation: We set the ordered state to true to show the receipt.
+            // We do NOT clear the cart immediately, so we can render the items in the receipt.
+            setIsOrdered(true);
+
+            // Now clear the cart
+            await clearCart(); 
+            console.log("Order placed for:", address.fullName);
+        } catch (error) {
+            console.error("Order failed:", error);
+        }
     };
 
-    const handleFinalize = () => {
+    const returnToHome = () => {
         // This runs when user clicks "Return to Home" after seeing the receipt
-        onClearCart(); 
         navigate('/');
-    };
+    }
 
     // --- VIEW 1: SUCCESS RECEIPT ---
     if (isOrdered) {
@@ -54,10 +75,14 @@ const Checkout = ({ cartItems, onClearCart }) => {
                     {/* Reusing existing profile styling for the receipt card */}
                     <div className="profile-card" style={{ boxShadow: 'none', border: '1px solid var(--border)', margin: '2rem 0' }}>
                         <div className="profile-content" style={{ padding: '1.5rem', textAlign: 'left' }}>
-                            <h3 style={{ borderBottom: '1px solid var(--border)', paddingBottom: '10px', marginBottom: '15px' }}>Receipt</h3>
+                            <h3 style={{ borderBottom: '1px solid var(--border)', paddingBottom: '10px', marginBottom: '15px' }}>
+                                Receipt
+                            </h3>
                             
-                            <p><strong>Shipping to:</strong><br/>
-                            {address.street}, {address.city}, {address.state} - {address.pinCode}</p>
+                            <p>
+                                <strong>Shipping to:</strong><br/>
+                                {address.street}, {address.city}, {address.state} - {address.pinCode}
+                            </p>
                             
                             <div style={{ marginTop: '20px' }}>
                                 {cartItems.map((item, index) => {
@@ -73,12 +98,12 @@ const Checkout = ({ cartItems, onClearCart }) => {
 
                             <div className="summary-row total" style={{ marginTop: '15px', paddingTop: '15px', borderTop: '2px dashed var(--border)' }}>
                                 <span>Total Paid:</span>
-                                <span>₹{totalPrice}</span>
+                                <span>₹{Number(lastTotalPaid).toFixed(2)}</span>
                             </div>
                         </div>
                     </div>
                     
-                    <button className="auth-submit-button" onClick={handleFinalize}>
+                    <button className="auth-submit-button" onClick={returnToHome}>
                         Return to Home
                     </button>
                 </div>

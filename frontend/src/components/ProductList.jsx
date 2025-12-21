@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProductCard from './ProductCard.jsx';
 
-const ProductList = ({ onAddToCart, isAuthenticated }) => {
+const ProductList = () => {
     // 1. STATE: products is where the data will be stored.
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -45,8 +45,6 @@ const ProductList = ({ onAddToCart, isAuthenticated }) => {
                         <ProductCard
                             key={product._id}
                             product={product}
-                            onAddToCart={onAddToCart}
-                            isAuthenticated={isAuthenticated}
                         />
                     ))
                 )}

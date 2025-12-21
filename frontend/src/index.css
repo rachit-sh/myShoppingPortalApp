@@ -1,0 +1,94 @@
+/* ==========================================================================
+   GLOBAL SETTINGS & VARIABLES
+   (Go here to change main colors, fonts, or dark mode)
+   ========================================================================== */
+
+/* Import font from Google. If you want different font, change this link. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* 1. COLORS AND VARIABLES
+   These are like shortcuts. If you change color here, it updates EVERYWHERE. */
+:root {
+  /* -- MAIN BRAND COLORS -- 
+     Change this hex code to make the site Red / Green / Yellow */
+  --primary: #4f46e5;       /* Current: Blue */
+  --primary-hover: #4338ca; /* Darker version for when mouse hovers */
+  
+  /* -- BACKGROUNDS -- */
+  --bg-body: #f8fafc;       /* Main page background (light grey) */
+  --bg-card: #ffffff;       /* Cards and boxes background (white) */
+  --bg-header: rgba(255, 255, 255, 0.8); /* See-through header */
+  --input-bg: #ffffff;      /* Input fields background */
+  
+  /* -- TEXT COLORS -- */
+  --text-main: #0f172a;     /* Main text (almost black) */
+  --text-muted: #64748b;    /* Secondary text (grey, for descriptions) */
+  
+  /* -- STATUS COLORS -- */
+  --success: #10b981;       /* Green for success messages */
+  --danger: #ef4444;        /* Red for delete/errors */
+
+  /* -- DESIGN EXTRAS -- */
+  --border: rgba(0, 0, 0, 0.08); /* Light border line */
+  --radius: 16px;                /* How round the corners are. Bigger number = rounder */
+  
+  /* Shadows make things look like they are floating */
+  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  
+  /* Animation speed. 0.3s is fast. 1s is slow. */
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 2. DARK MODE SETTINGS
+   This automatically happens if user computer is set to Dark Mode.
+   It overrides the colors above. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-body: #0f172a;      /* Very dark blue background */
+    --bg-card: #1e293b;      /* Slightly lighter for cards */
+    --bg-header: rgba(15, 23, 42, 0.8);
+    --text-main: #f8fafc;    /* White text */
+    --text-muted: #94a3b8;   /* Light grey text */
+    --border: rgba(255, 255, 255, 0.1);
+    --input-bg: #0f172a;
+    /* Shadows need to be stronger in dark mode to be visible */
+    --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 25px 30px -5px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* 3. RESET & BODY
+   This makes sure all browsers (Chrome, Firefox) look the same. */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Very important! Keeps padding inside the width */
+}
+
+body {
+  font-family: 'Inter', sans-serif; /* Uses the font imported at top */
+  background-color: var(--bg-body); /* Uses variable from top */
+  color: var(--text-main);
+  line-height: 1.6; /* Space between lines of text */
+  /* Smoothly change color if switching dark/light mode */
+  transition: background-color 0.3s ease, color 0.3s ease; 
+  -webkit-font-smoothing: antialiased; /* Makes font look sharper on Mac */
+}
+
+/* Main wrapper for page content so it doesn't touch edges */
+.main-content-area {
+  max-width: 1200px; /* Max width of site. Change to 1400px for wider site */
+  margin: 3rem auto; /* Centers the div in middle of screen */
+  padding: 0 2rem;   /* Space on left and right sides */
+  min-height: 66.5vh; /* This "pushes" the footer down by taking up all available space */
+}
+
+footer {
+  background: rgb(41, 41, 41);
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  color: var(--text-grey);
+  font-size: 0.9rem;
+}

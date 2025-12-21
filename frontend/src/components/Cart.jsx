@@ -1,13 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useCart } from '../context/useCart.js';
 
 // The component receives the cart items array and handler functions as props
-const Cart = ({ items, onRemove, onDecrease, onAdd }) => {
+const Cart = () => {
+    // Destructure everything from Context
+    const { cartItems, removeFromCart, decreaseQuantity, addToCart } = useCart();
 
     // Calculate the total price of all items in the cart
     const calculateTotal = () => {
         // items.reduce is a powerful array method for calculating a single value (the sum)
-        return items.reduce((total, item) => {
+        return cartItems.reduce((total, item) => {
             // Note: If your backend populates the product, the data is inside item.product
             const price = item.product?.price || item.price || 0;
             return total + price * item.quantity;
@@ -20,7 +23,7 @@ const Cart = ({ items, onRemove, onDecrease, onAdd }) => {
         <div className="cart-container">
             <h2>🛍️ Your Shopping Cart</h2>
 
-            {items.length === 0 ? (
+            {cartItems.length === 0 ? (
                 <div className="empty-cart-message">
                     <p>Your cart is empty. Start adding some products!</p>
                 </div>
@@ -30,7 +33,7 @@ const Cart = ({ items, onRemove, onDecrease, onAdd }) => {
 
                     {/* Left Column: The scrollable list of products in the cart */}
                     <div className="cart-items-list">
-                        {items.map((item) => {
+                        {cartItems.map((item) => {
                             // Helper to handle both flat objects and nested product models
                             const product = item.product || item;
 
@@ -51,19 +54,21 @@ const Cart = ({ items, onRemove, onDecrease, onAdd }) => {
 
                                     {/* Quantity controls: Uses the styled control group from App.css */}
                                     <div className="cart-item-controls">
+                                        {/* Use Context functions */}
+
                                         {/* Decrease Button: Uses onDecrease prop function */}
-                                        <button onClick={() => onDecrease(product._id)}>−</button>
+                                        <button onClick={() => decreaseQuantity(product._id)}>−</button>
 
                                         <span className="item-qty">{item.quantity}</span>
 
                                         {/* Increase Button: Uses onAdd prop function */}
-                                        <button onClick={() => onAdd(product)}>+</button>
+                                        <button onClick={() => addToCart(product)}>+</button>
                                     </div>
 
                                     {/* Remove Button: Styled as a danger/delete action */}
                                     <button 
                                         className="remove-item-button" 
-                                        onClick={() => onRemove(product._id)}
+                                        onClick={() => removeFromCart(product._id)}
                                     >
                                         Remove
                                     </button>

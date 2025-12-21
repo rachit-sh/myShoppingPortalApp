@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/useAuth.js';
+import { useCart } from '../context/useCart.js';
 
 const Header = () => {
     const { currentUser, logout, isLoading } = useAuth();
+    const { totalCartCount } = useCart(); // Get the total count
     
     // Place all navigation links here
     return (
@@ -18,7 +20,29 @@ const Header = () => {
                     {/* Add Profile Link ONLY if logged in */}
                     {currentUser && <Link to="/profile" className="nav-link">👤 Profile</Link>}
 
-                    <Link to="/cart" className="nav-link">🛍️ Cart</Link>
+                    <Link to="/cart" className="nav-link" style={{position: 'relative'}}>
+                        🛍️ Cart
+                        {/* Real-time Badge logic */}
+                        {currentUser && totalCartCount > 0 && (
+                            <span style={{
+                                position: 'absolute',
+                                top: '-8px',
+                                right: '-12px',
+                                background: 'var(--danger)',
+                                color: 'white',
+                                borderRadius: '50%',
+                                width: '20px',
+                                height: '20px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '0.75rem',
+                                fontWeight: 'bold'
+                            }}>
+                                {totalCartCount}
+                            </span>
+                        )}
+                    </Link>
 
                     {/* Conditional rendering based on authentication status */}
                     {currentUser ? (

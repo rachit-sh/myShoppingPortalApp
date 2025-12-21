@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user.model.js'; // To potentially fetch up-to-date user data
 
 const verifyJWT = async (req, res, next) => {
     try {
@@ -17,25 +16,10 @@ const verifyJWT = async (req, res, next) => {
         // 2. Verify the Token
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-        // 3. Find User based on Payload
-        // We find the user by the ID stored in the token payload.
-        // We select the password field as 'false' to prevent it from being fetched.
-        const user = await User.findById(decodedToken?._id).select("-password");
-
-        if (!user) {
-            // Token is valid but the user corresponding to the token no longer exists in the DB (e.g., deleted).
-            // We should also clear the invalid cookie.
-            res.clearCookie('accessToken');
-            return res.status(401).json({ 
-                message: 'Invalid Access Token: User not found' 
-            });
-        }
-
-        // 4. Attach User Object to Request
-        // The user object (without the password) is now available as req.user for all subsequent controllers.
-        req.user = user;
+        // Instead of querying the DB, we trust the token.
+        // req.user now holds { _id, username, email } directly from the JWT payload.
+        req.user = decodedToken;
         
-        // Pass control to the next middleware or the route handler.
         next();
 
     } catch (error) {

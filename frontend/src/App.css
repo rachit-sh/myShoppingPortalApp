@@ -1,109 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
 /* ==========================================================================
-   1. THEME VARIABLES (Adaptive Dark Mode)
+   COMPONENT STYLES
+   (Go here to change buttons, cards, header layout, etc.)
    ========================================================================== */
-:root {
-  /* Primary Branding */
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  
-  /* Backgrounds */
-  --bg-body: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-header: rgba(255, 255, 255, 0.8);
-  --input-bg: #ffffff;
-  
-  /* Text Colors */
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  
-  /* UI Elements */
-  --border: rgba(0, 0, 0, 0.08);
-  --success: #10b981;
-  --danger: #ef4444;
-  
-  /* Elevation & Shape */
-  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  --radius: 16px;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
 
-/* 2. DARK MODE OVERRIDES */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-body: #0f172a;      /* Deep Slate Black */
-    --bg-card: #1e293b;      /* Lighter Slate */
-    --bg-header: rgba(15, 23, 42, 0.8);
-    --text-main: #f8fafc;    /* Off-white text */
-    --text-muted: #94a3b8;   /* Soft grey text */
-    --border: rgba(255, 255, 255, 0.1);
-    --input-bg: #0f172a;
-    --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 25px 30px -5px rgba(0, 0, 0, 0.5);
-  }
-}
-
-/* ==========================================================================
-   3. GLOBAL RESET & BASE STYLES
-   ========================================================================== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--bg-body);
-  color: var(--text-main);
-  transition: background-color 0.3s ease, color 0.3s ease;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-.main-content-area {
-  max-width: 1200px;
-  margin: 3rem auto;
-  padding: 0 2rem;
-}
-
-/* ==========================================================================
-   4. GLASS-MORPHIC HEADER & NAVIGATION
-   ========================================================================== */
+/* --- 1. HEADER (Top Navigation) --- */
 .app-header {
-  position: sticky;
+  position: sticky; /* Keeps header fixed at top when scrolling */
   top: 0;
-  z-index: 1000;
+  z-index: 1000;    /* Ensures header stays ON TOP of everything else */
   background: var(--bg-header);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px); /* Makes background blurry (Glass effect) */
   border-bottom: 1px solid var(--border);
-  padding: 1rem 0;
+  padding: 1rem 0;  /* 1rem space top/bottom */
 }
 
 .app-header nav {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto;   /* Centers the nav items */
   padding: 0 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: flex;    /* Flexbox! Makes items sit in a row */
+  justify-content: space-between; /* Pushes Logo to left, Links to right */
+  align-items: center; /* Vertically centers items */
 }
 
 .logo-link {
-  font-size: 1.6rem;
-  font-weight: 800;
+  font-size: 1.6rem; /* Size of Logo text */
+  font-weight: 800;  /* Thickness (800 is extra bold) */
   color: var(--primary);
-  text-decoration: none;
-  letter-spacing: -1px;
+  text-decoration: none; /* Removes underline */
+  letter-spacing: -1px;  /* Squeezes letters slightly */
 }
 
-/* FIX: Spacing for right-side nav elements using modern flex-gap */
 .nav-links-right {
   display: flex;
   align-items: center;
-  gap: 1.5rem; 
+  gap: 1.5rem; /* Space between "Cart", "Profile", "Logout" */
 }
 
 .nav-link {
@@ -111,9 +42,10 @@ body {
   color: var(--text-muted);
   font-weight: 600;
   font-size: 0.95rem;
-  transition: color 0.2s;
+  transition: color 0.2s; /* Smooth color change on hover */
 }
 
+/* When mouse goes over link, it turns Primary color */
 .nav-link:hover {
   color: var(--primary);
 }
@@ -122,47 +54,48 @@ body {
   font-weight: 700;
   font-size: 0.85rem;
   color: var(--primary);
-  background: rgba(79, 70, 229, 0.1);
+  background: rgba(79, 70, 229, 0.1); /* Very light purple background */
   padding: 6px 14px;
-  border-radius: 100px;
-  white-space: nowrap;
+  border-radius: 100px; /* Makes it a capsule shape */
+  white-space: nowrap;  /* Prevents text from breaking into two lines */
 }
 
-/* ==========================================================================
-   5. PRODUCT GRID & CARDS
-   ========================================================================== */
+/* --- 2. PRODUCT CARDS (Home Page) --- */
 .products-grid {
   display: grid;
+  /* Auto-fill logic: Fits as many cards as possible. 
+     minmax(280px, 1fr) means card is at least 280px wide. */
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2.5rem;
+  gap: 2.5rem; /* Space between cards */
 }
 
 .product-card {
   background: var(--bg-card);
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  overflow: hidden;
+  overflow: hidden; /* Hides image corners if they poke out */
   box-shadow: var(--shadow);
   transition: var(--transition);
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Stacks image on top of details */
 }
 
+/* Effect when hovering over product card */
 .product-card:hover {
-  transform: translateY(-10px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-10px); /* Moves card UP slightly */
+  box-shadow: var(--shadow-lg); /* Makes shadow bigger */
 }
 
 .product-image {
   width: 100%;
-  height: 240px;
-  object-fit: cover;
+  height: 240px;     /* Fixed height for all images */
+  object-fit: cover; /* Crops image nicely to fit box */
   border-bottom: 1px solid var(--border);
 }
 
 .product-details {
-  padding: 1.5rem;
-  flex-grow: 1;
+  padding: 1.5rem; /* Space inside the card text area */
+  flex-grow: 1;    /* Pushes bottom buttons down to align them */
   display: flex;
   flex-direction: column;
 }
@@ -184,7 +117,8 @@ body {
   color: var(--text-muted);
   font-size: 0.9rem;
   margin-bottom: 1.5rem;
-  height: 3rem;
+  height: 3rem; /* Limit height so cards stay same size */
+  /* Logic to cut off text with "..." after 2 lines */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -192,9 +126,7 @@ body {
   line-clamp: 2;
 }
 
-/* ==========================================================================
-   6. CART PAGE (Two-Column Layout)
-   ========================================================================== */
+/* --- 3. CART PAGE --- */
 .cart-container {
   max-width: 1100px;
   margin: 3rem auto;
@@ -202,18 +134,20 @@ body {
 
 .cart-layout {
   display: grid;
-  grid-template-columns: 1fr 360px; /* Separates items from summary card */
+  /* Two columns: Items (takes available space) | Summary (360px fixed) */
+  grid-template-columns: 1fr 360px; 
   gap: 2.5rem;
   align-items: start;
 }
 
+/* Responsive: If screen is small (mobile/tablet), stack them */
 @media (max-width: 900px) {
   .cart-layout { grid-template-columns: 1fr; }
 }
 
 .cart-item {
   display: flex;
-  align-items: center;
+  align-items: center; /* Vertically center items */
   gap: 1.5rem;
   background: var(--bg-card);
   padding: 1.5rem;
@@ -230,7 +164,7 @@ body {
   border-radius: 12px;
 }
 
-.cart-item-info { flex-grow: 1; }
+.cart-item-info { flex-grow: 1; /* Pushes price/remove buttons to right */ }
 
 .cart-item-name {
   font-weight: 700;
@@ -243,6 +177,7 @@ body {
   font-weight: 700;
 }
 
+/* The + and - buttons container */
 .cart-item-controls {
   display: flex;
   align-items: center;
@@ -257,32 +192,30 @@ body {
   width: 28px;
   height: 28px;
   padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: var(--bg-card);
   color: var(--text-main);
   border: 1px solid var(--border);
   font-size: 1.1rem;
 }
 
+/* Specific red style for Remove button */
 .remove-item-button {
-  background: #fee2e2 !important;
-  color: var(--danger) !important;
+  background: #aa0000 !important; /* Dark red bg */
+  color: white !important; /* White text */
   border: none !important;
   width: auto !important;
   padding: 8px 16px !important;
   font-size: 0.85rem !important;
 }
 
-/* Sticky Order Summary */
+/* The Right Side Box in Cart */
 .cart-summary {
   background: var(--bg-card);
   padding: 2rem;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-lg);
-  position: sticky;
+  position: sticky; /* Keeps it visible when scrolling items */
   top: 100px;
 }
 
@@ -296,15 +229,13 @@ body {
 .summary-row.total {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 2px dashed var(--border);
+  border-top: 2px dashed var(--border); /* Dotted line above Total */
   color: var(--text-main);
   font-size: 1.5rem;
   font-weight: 800;
 }
 
-/* ==========================================================================
-   7. PROFILE PAGE (Dashboard Aesthetic)
-   ========================================================================== */
+/* --- 4. PROFILE PAGE --- */
 .profile-card {
   background: var(--bg-card);
   border-radius: var(--radius);
@@ -312,26 +243,28 @@ body {
   box-shadow: var(--shadow-lg);
   overflow: hidden;
   max-width: 550px;
-  margin: 0 auto;
+  margin: 0 auto; /* Centers the card horizontally */
 }
 
 .profile-header-banner {
+  /* Diagonal gradient background */
   background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
   height: 120px;
   position: relative;
-  margin-bottom: 60px;
+  margin-bottom: 60px; /* Space for the avatar to overlap */
 }
 
+/* The circle icon holder */
 .profile-avatar-wrapper {
   position: absolute;
-  bottom: -50px;
+  bottom: -50px; /* Pushes it half-way out of banner */
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%); /* Centers it exactly */
   width: 100px;
   height: 100px;
   background: var(--bg-card);
-  border: 5px solid var(--bg-card);
-  border-radius: 50%;
+  border: 5px solid var(--bg-card); /* Creates white ring around circle */
+  border-radius: 50%; /* Circle shape */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -346,24 +279,16 @@ body {
 
 .profile-field {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Pushes label left, value right */
   padding: 1.25rem 0;
   border-bottom: 1px solid var(--border);
   text-align: left;
 }
 
-.field-label {
-  color: var(--text-muted);
-  font-weight: 500;
-}
+.field-label { color: var(--text-muted); font-weight: 500; }
+.field-value { font-weight: 700; }
 
-.field-value {
-  font-weight: 700;
-}
-
-/* ==========================================================================
-   8. BUTTONS
-   ========================================================================== */
+/* --- 5. BUTTONS (Global) --- */
 button {
   width: 100%;
   padding: 12px;
@@ -375,6 +300,7 @@ button {
   transition: var(--transition);
 }
 
+/* Hover effect for all buttons: Moves up and adds shadow */
 button:hover:not(:disabled) {
   background: var(--primary-hover);
   transform: translateY(-2px);
@@ -387,33 +313,55 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* Grouping common primary buttons */
 .add-to-cart-button, .auth-submit-button, .checkout-button {
   background: var(--primary);
   color: #fff;
 }
 
-.add-to-cart-button:hover:not(:disabled), .auth-submit-button:hover, .checkout-button:hover {
-  background: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(79, 70, 229, 0.3);
+/* --- 6. QUANTITY CONTROLS (Inside Product Card) --- */
+.card-qty-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-body);
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  padding: 4px;
+  margin-top: 10px;
 }
 
-.add-to-cart-button:disabled {
-  background: var(--text-muted);
-  opacity: 0.5;
-  cursor: not-allowed;
+/* Small square + and - buttons */
+.card-qty-controls button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  transition: background-color 0.2s;
 }
 
-/* ==========================================================================
-   9. AUTHENTICATION (Login & Signup)
-   ========================================================================== */
+.card-qty-text {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--primary);
+}
+
+/* --- 7. AUTH FORMS (Login/Signup) --- */
 .auth-form-container {
   background: var(--bg-card);
   padding: 3rem;
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
   max-width: 480px;
-  margin: 5rem auto;
+  margin: 5rem auto; /* Centers on page */
   border: 1px solid var(--border);
   text-align: center;
 }
@@ -433,7 +381,7 @@ button:disabled {
 
 .form-group {
   margin-bottom: 1.5rem;
-  text-align: left;
+  text-align: left; /* Align input labels to left */
 }
 
 .form-group label {
@@ -454,16 +402,17 @@ button:disabled {
   border: 1px solid var(--border);
   color: var(--text-main);
   font-size: 1rem;
-  outline: none;
+  outline: none; /* Removes default blue browser outline */
   transition: var(--transition);
 }
 
+/* Glow effect when typing in input */
 .form-group input:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
 }
 
-/* Feedback Messages */
+/* Feedback boxes (Success/Error) */
 .form-message {
   padding: 12px;
   border-radius: 8px;
