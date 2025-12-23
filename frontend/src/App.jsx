@@ -11,6 +11,7 @@ import Cart from "./components/Cart.jsx";
 import Header from "./components/Header.jsx";
 import Login from "./components/Login.jsx";
 import Signup from "./components/Signup.jsx";
+import CreateProduct from "./components/CreateProduct.jsx";
 import Checkout from "./components/Checkout.jsx";
 
 // CSS file for App
@@ -52,6 +53,12 @@ const AppContent = () => {
           <Route
             path="/" 
             element={<ProductList />}
+          />
+
+          {/* Protected Route for Creating Products */}
+          <Route 
+            path="/create-product" 
+            element={currentUser ? <CreateProduct /> : <Navigate to="/login" replace />} 
           />
         
           {/* Cart Route

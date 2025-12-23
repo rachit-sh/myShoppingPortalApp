@@ -81,7 +81,7 @@ body {
   max-width: 1200px; /* Max width of site. Change to 1400px for wider site */
   margin: 3rem auto; /* Centers the div in middle of screen */
   padding: 0 2rem;   /* Space on left and right sides */
-  min-height: 66.5vh; /* This "pushes" the footer down by taking up all available space */
+  min-height: 100vh; /* This "pushes" the footer down by taking up all available space */
 }
 
 footer {

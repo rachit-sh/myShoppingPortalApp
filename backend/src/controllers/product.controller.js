@@ -46,11 +46,26 @@ export const getAllProducts = async (req, res) => {
         const limit = parseInt(req.query.limit) || 35;
         const skip = (page - 1) * limit;
 
-        const products = await Product.find()
+        // 1. Extract search term
+        const search = req.query.search || "";
+
+        // 2. Build Query Object
+        // If search exists, find products where name OR category matches (case-insensitive)
+        const query = search ? {
+            $or: [
+                { name: { $regex: search, $options: "i" } },
+                { category: { $regex: search, $options: "i" } }
+            ]
+        } : {};
+
+        const products = await Product.find(query)
             .sort({ createdAt: -1 }) // Show newest products first
             .skip(skip)
             .limit(limit);
-        
+
+        // Return total count for frontend pagination logic
+        const total = await Product.countDocuments(query);
+
         res.status(200).json(products);
     } catch (error) {
         console.error(`Error fetching products: ${error.message}`);
