@@ -3,6 +3,7 @@ import axios from 'axios';
 import ProductCard from './ProductCard.jsx';
 import { Link } from 'react-router-dom'; // To link to Create Product
 import { useAuth } from '../context/useAuth.js'; // To check if user is logged in
+import SpecialOffers from './SpecialOffers.jsx';
 
 const ProductList = () => {
     // STATE: products is where the data will be stored.
@@ -52,6 +53,9 @@ const ProductList = () => {
     return (
         <div className="product-list-container">
             {/* Header Section: Title + Create Button */}
+            {/* Show the offer only if the user hasn't typed a search yet */}
+            {!searchTerm && <SpecialOffers />}
+
             <div className="list-header">
                 <h2>Featured Products</h2>
                 

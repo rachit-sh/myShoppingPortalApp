@@ -8,6 +8,7 @@ const Checkout = () => {
     const { cartItems, clearCart } = useCart();
     const { currentUser } = useAuth();
     const [isOrdered, setIsOrdered] = useState(false);
+    const [couponApplied, setCouponApplied] = useState(false);
     
     // Local state for the temporary address (not stored in backend)
     const [address, setAddress] = useState({
@@ -34,10 +35,28 @@ const Checkout = () => {
         }, 0);
     };
 
-    const totalPrice = calculateTotal().toFixed(2);
+    const totalPrice = couponApplied ? (calculateTotal() * 0.7).toFixed(2) : calculateTotal().toFixed(2);
 
     const handleInput = (e) => {
         setAddress({ ...address, [e.target.name]: e.target.value });
+    };
+
+    const applyCoupon = () => {
+        const couponCode = document.querySelector('input[name="coupon"]').value;
+        if (couponCode === "NEWYEAR2025") {
+            if (couponApplied) {
+                alert("Coupon already applied.");
+                return;
+            }
+            setCouponApplied(true);
+            alert("Coupon applied! You get 30% off.");
+            console.log("Discounted Price:", totalPrice);
+            // Storing discounted price in lastTotalPaid for final receipt
+            // Updating totalPrice to reflect discount
+        } else {
+            alert("Invalid coupon code.");
+            setCouponApplied(false);
+        }
     };
 
     const handlePlaceOrder = async (e) => {
@@ -145,7 +164,21 @@ const Checkout = () => {
                             <label>Pin Code</label>
                             <input name="pinCode" type="text" required onChange={handleInput} placeholder="400001" />
                         </div>
-
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <div className="form-group">
+                                <label>Coupon</label>
+                                <input name="coupon" type="text" required placeholder="Enter Coupon code" />
+                            </div>
+                            <div className="form-group" style={{ alignSelf: 'end' }}>
+                                <button 
+                                    type="button"
+                                    className="apply-coupon-button"
+                                    onClick={applyCoupon}
+                                >
+                                    Apply Coupon
+                                </button>
+                            </div>
+                        </div>
                         <button type="submit" className="checkout-button">
                             Place Order (₹{totalPrice})
                         </button>
